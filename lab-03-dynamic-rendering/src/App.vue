@@ -13,6 +13,18 @@
         <ul v-else>
           <li v-for="(item, index) in items" :key="index">{{ item }}</li>
         </ul>
+
+  <div>
+    <button @click="isPanelVisible = !isPanelVisible">
+      {{ isPanelVisible ? 'Сховати' : 'Показати' }} панель
+    </button>
+    <div class="panel" v-if="isPanelVisible">
+      <p>v-if</p>
+    </div>
+    <div class="panel" v-show="isPanelVisible">
+      <p>v-show</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,7 +33,9 @@
       return{ 
         isLoading: false,
         hasError: false,
-        items: ['Елемент 1', 'Елемент 2', 'Елемент 3']
+        items: ['Елемент 1', 'Елемент 2', 'Елемент 3'],
+
+        isPanelVisible: true
       }
     },
     methods: {
@@ -48,5 +62,11 @@
 </script>
 
 <style scoped>
-
+  .panel {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    width: 200px;
+    text-align: center;
+  }
 </style>
