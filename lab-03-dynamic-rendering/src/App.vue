@@ -39,6 +39,30 @@
       </li>
     </ul>
   </div>
+
+  <div>
+    <label>
+      <input type="radio" value="all" v-model="filter" />
+      Усі
+    </label>
+    <label>
+      <input type="radio" value="fruits" v-model="filter" />
+      Фрукти
+    </label>
+    <label>
+      <input type="radio" value="vegetables" v-model="filter" />
+      Овочі
+    </label>
+  </div>
+
+  <div>Показано {{ filteredProducts.length }} із {{ products.length }} продуктів</div>
+
+  <ul class="products-list">
+    <li v-for="product in filteredProducts" :key="product.id" :class="{'fruit': product.category === 'fruits', 'vegetable': product.category === 'vegetables' }">
+      {{ product.title }} ({{ product.category }})
+    </li>
+  </ul>
+  <div v-if="!filteredProducts.length">Нічого не знайдено</div>
 </template>
 
 <script>
@@ -47,6 +71,7 @@
       return{ 
         isLoading: false,
         hasError: false,
+        filter: 'all',
         items: ['Елемент 1', 'Елемент 2', 'Елемент 3'],
 
         isPanelVisible: true,
@@ -92,6 +117,12 @@
       },
       removeProduct(id){
         this.products = this.products.filter(product => product.id !== id);
+      }
+    },
+    computed: {
+      filteredProducts(){
+        if(this.filter === 'all') return this.products;
+        return this.products.filter(product => product.category === this.filter);
       }
     }
   }
