@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div>
     <button @click="toggleLoading">Toggle loading</button>
@@ -25,6 +23,22 @@
       <p>v-show</p>
     </div>
   </div>
+
+  <div>
+    <input v-model="newProductTitle" placeholder="Назва продукту" />
+    <select v-model="newProductCategory">
+      <option value="">Виберіть категорію</option>
+      <option value="fruits">Фрукти</option>
+      <option value="vegetables">Овочі</option>
+    </select>
+    <button @click="addProduct">Додати продукт</button>
+    <ul class="products-list">
+      <li v-for="product in products" :key="product.id" :class="{'fruit': product.category === 'fruits', 'vegetable': product.category === 'vegetables' }">
+        {{ product.title }} ({{ product.category }})
+        <button @click="removeProduct(product.id)">Видалити</button>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -35,7 +49,14 @@
         hasError: false,
         items: ['Елемент 1', 'Елемент 2', 'Елемент 3'],
 
-        isPanelVisible: true
+        isPanelVisible: true,
+
+        products: [
+          {id: 1, title: 'Яблуко', category: 'fruits' },
+          {id: 2, title: 'Морква', category: 'vegetables' },
+        ],
+        newProductTitle: '',
+        newProductCategory: 'fruits',
       }
     },
     methods: {
@@ -56,6 +77,21 @@
       },
       addSampleItems(){
         this.items = ['Елемент 1', 'Елемент 2', 'Елемент 3'];
+      },
+      addProduct(){
+        if(this.newProductTitle && this.newProductCategory){
+          const newProduct = {
+            id: this.products.length + 1,
+            title: this.newProductTitle,
+            category: this.newProductCategory,
+          };
+          this.products.push(newProduct);
+          this.newProductTitle = '';
+          this.newProductCategory = 'fruits';
+        }
+      },
+      removeProduct(id){
+        this.products = this.products.filter(product => product.id !== id);
       }
     }
   }
@@ -68,5 +104,14 @@
     margin-top: 10px;
     width: 200px;
     text-align: center;
+  }
+
+  .products-list li.fruit {
+    color: #1a8917;
+    font-weight: bold;
+  }
+  .products-list li.vegetable {
+    color: #e17a00;
+    font-style: italic;
   }
 </style>
