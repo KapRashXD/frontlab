@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li v-for="task in taskStore.tasks" :key="task.id">
+        <li v-for="task in taskStore.filteredTasks" :key="task.id">
             {{task.title}} <span v-if="task.done">(завершено)</span>
             <button @click="taskStore.toggleTask(task.id)">Перемкнути статус</button>
             <button @click="taskStore.removeTask(task.id)">Видалити</button>
