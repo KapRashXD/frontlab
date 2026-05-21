@@ -2,7 +2,11 @@
   <div>
     <h1>Task Manager</h1>
     <ItemForm @add-item="addItem"/>
-    <ItemList :items="items"/>
+    <ItemList 
+      :items="items"
+      @delete-item="deleteItem"
+      @toggle-item="toggleItem"
+    />
   </div>
 </template>
 <script>
@@ -32,6 +36,15 @@
           text,
           done: false
         })
+      },
+      deleteItem(id) {
+        this.items = this.items.filter(item => item.id !== id);
+      },
+      toggleItem(id) {
+        const item = this.items.find(item => item.id === id);
+        if (item) {
+          item.done = !item.done;
+        }
       }
     }
   }

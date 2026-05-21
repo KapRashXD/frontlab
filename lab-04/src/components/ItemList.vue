@@ -3,7 +3,9 @@
     <ItemRow 
     v-for="item in items" 
     :key="item.id" 
-    :item="item"/>
+    :item="item"
+    @delete-item="$emit('delete-item', $event)"
+    @toggle-item="$emit('toggle-item', $event)"/>
   </ul>
 </template>
 

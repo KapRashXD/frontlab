@@ -1,6 +1,8 @@
 <template>
-    <li>
-        {{ item.text }} <span v-if="item.done">(done)</span>
+    <li :style="{ textDecoration: item.done ? 'line-through' : 'none' }">
+        {{ item.text }}
+        <button @click="$emit('toggle-item', item.id)">Перемкнути статус</button>
+        <button @click="$emit('delete-item', item.id)">Видалити</button>
     </li>
 </template>
 <script>
