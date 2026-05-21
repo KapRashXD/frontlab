@@ -2,7 +2,7 @@
   <div>
     <h1>Task Manager</h1>
     <ItemForm />
-    <ItemList />
+    <ItemList :items="items"/>
   </div>
 </template>
 <script>
@@ -10,10 +10,19 @@
   import ItemList from './components/ItemList.vue'
 
   export default{
-    name: 'Task Manager',
+    name: 'App',
     components: {
       ItemForm,
       ItemList,
+    },
+    data(){
+      return{
+        items: [
+          { id: 1, text: 'Task 1', done: false },
+          { id: 2, text: 'Task 2', done: true },
+          { id: 3, text: 'Task 3', done: false },
+        ]
+      }
     }
   }
 </script>
