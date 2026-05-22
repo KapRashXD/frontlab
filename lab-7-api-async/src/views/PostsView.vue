@@ -1,11 +1,12 @@
 <template>
     <div>
         <h2>Каталог постів</h2>
+        <input v-model="query" placeholder="Пошук постів..."/>
         <span v-if="isLoading">Завантаження...</span>
         <span v-else-if="error">Помилка: {{ error }}</span>
-        <span v-else-if="items.length === 0">Пости не знайдено.</span>
+        <span v-else-if="filteredItems.length === 0">Нічого не знайдено.</span>
         <div v-else>
-            <li v-for="post in items" :key="post.id">
+            <li v-for="post in filteredItems" :key="post.id">
                 <p>{{ post.title }}</p>
                 <router-link :to="{name: 'postDetails', params: {id: post.id}}">Деталі</router-link>
             </li>
@@ -14,11 +15,12 @@
 </template>
 
 <script setup>
-    import {ref, onMounted} from 'vue';
+    import {ref, onMounted, computed} from 'vue';
 
     const items = ref([]);
     const isLoading = ref(false);
     const error = ref(null);
+    const query = ref('');
 
     async function loadItems(){
         isLoading.value = true;
@@ -37,5 +39,17 @@
             isLoading.value = false;
         }
     }
+
+    const filteredItems = computed(() => {
+        if(!query.value.trim()){
+            return items.value;
+        }
+        const queryLower = query.value.toLowerCase();
+        return items.value.filter(
+            item => 
+                item.title.toLowerCase().includes(queryLower) ||
+                item.body.toLowerCase().includes(queryLower)
+        );
+    })
     onMounted(() => loadItems());
 </script>
