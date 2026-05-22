@@ -11,26 +11,45 @@
                 <router-link :to="{name: 'postDetails', params: {id: post.id}}">Деталі</router-link>
             </li>
         </div>
+        <div>
+            <button @click="prevPage" :disabled="currentPage === 1 || isLoading">Попередня сторінка</button>
+            <span>Сторінка {{ currentPage }}</span>
+            <button @click="nextPage" :disabled="isLoading">Наступна сторінка</button>
+        </div>
     </div>
 </template>
 
 <script setup>
-    import {ref, onMounted, computed} from 'vue';
+    import {ref, onMounted, computed, watch} from 'vue';
 
     const items = ref([]);
     const isLoading = ref(false);
     const error = ref(null);
     const query = ref('');
 
+    const currentPage = ref(1);
+    const limit = 10;
+    const hasNextPage = ref(true);
+    let abortController = null;
+
     async function loadItems(){
+        if(abortController){
+            abortController.abort();
+        }
+
         isLoading.value = true;
         error.value = null;
+        abortController = new AbortController();
+
+        let url = `https://jsonplaceholder.typicode.com/posts?_page=${currentPage.value}&_limit=${limit}`;
         try{
-            const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+            const response = await fetch(url, { signal: abortController.signal });
             if(!response.ok){
                 throw new Error('Помилка при завантаженні даних');
             }
-            items.value = await response.json();
+            const data = await response.json();
+            items.value = data;
+            hasNextPage.value = data.length === limit;
         }catch(err){
             error.value = err.message;
             items.value = [];
@@ -51,5 +70,17 @@
                 item.body.toLowerCase().includes(queryLower)
         );
     })
-    onMounted(() => loadItems());
+
+    function prevPage(){
+        if(currentPage.value > 1){
+            currentPage.value--;
+        }
+    }
+    function nextPage(){
+        if(hasNextPage.value){
+            currentPage.value++;
+        }
+    }
+
+    watch(currentPage, loadItems, { immediate: true });
 </script>
