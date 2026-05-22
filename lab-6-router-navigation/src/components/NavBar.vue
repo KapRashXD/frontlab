@@ -1,8 +1,9 @@
 <template>
     <nav>
-        <router-link to="/" exact-active-class="active-link">Home</router-link>
-        <router-link to="/about" exact-active-class="active-link">About</router-link>
-        <router-link to="/catalog" exact-active-class="active-link">Catalog</router-link>
+        <router-link to="/" active-class="active-link">Home</router-link>
+        <router-link to="/about" active-class="active-link">About</router-link>
+        <router-link to="/catalog" active-class="active-link">Catalog</router-link>
+        <router-link to="/profile" active-class="active-link">Profile</router-link>
     </nav>
 </template>
 

@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import CatalogView from '../views/CatalogView.vue'
 import ProductDetailsView from '../views/ProductDetailsView.vue'
+import ProfileView from '../views/ProfileView.vue'
+import ProfileInfoView from '../views/ProfileInfoView.vue'
+import ProfileSettingsView from '../views/ProfileSettingsView.vue'
 
 const routes = [
   {
@@ -24,6 +27,15 @@ const routes = [
     path: '/catalog/:id',
     name: 'productDetails',
     component: ProductDetailsView,
+  },
+  {
+    path: '/profile',
+    component: ProfileView,
+    children: [
+      { path: '', redirect: '/profile/info' },
+      { path: 'info', component: ProfileInfoView },
+      { path: 'settings', component: ProfileSettingsView },
+    ],
   },
 ]
 
