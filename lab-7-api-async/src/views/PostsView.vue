@@ -1,12 +1,15 @@
 <template>
-    <div style="max-width: 700px; margin: 0 auto;">
+    <div>
         <h2>Каталог постів</h2>
         <span v-if="isLoading">Завантаження...</span>
         <span v-else-if="error">Помилка: {{ error }}</span>
         <span v-else-if="items.length === 0">Пости не знайдено.</span>
-        <span v-else>
-            
-        </span>
+        <div v-else>
+            <li v-for="post in items" :key="post.id">
+                <p>{{ post.title }}</p>
+                <router-link :to="{name: 'postDetails', params: {id: post.id}}">Деталі</router-link>
+            </li>
+        </div>
     </div>
 </template>
 
