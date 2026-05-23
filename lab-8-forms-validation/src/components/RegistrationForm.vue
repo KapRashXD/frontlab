@@ -4,36 +4,38 @@
         <label>
             Ім'я:
             <input v-model.trim="form.name" type="text"/>
-            <div v-if="errors.name" class="error">{{ errors.name }}</div>
+            <transition name="fade"><div v-if="errors.name" class="error">{{ errors.name }}</div></transition>
         </label>
         <label>
             Електронна пошта:
             <input v-model.trim="form.email" type="email"/>
-            <div v-if="errors.email" class="error">{{ errors.email }}</div>
+            <transition name="fade"><div v-if="errors.email" class="error">{{ errors.email }}</div></transition>
         </label>
         <label>
             Пароль:
             <input v-model="form.password" type="password"/>
-            <div v-if="errors.password" class="error">{{ errors.password }}</div>
+            <transition name="fade"><div v-if="errors.password" class="error">{{ errors.password }}</div></transition>
         </label>
         <label>
             Підтвердження пароля:
             <input v-model="form.confirmPassword" type="password"/>
-            <div v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</div>
+            <transition name="fade"><div v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</div></transition>
         </label>
         <label>
             Вік:
             <input v-model.number="form.age" type="number" min="0"/>
-            <div v-if="errors.age" class="error">{{ errors.age }}</div>
+            <transition name="fade"><div v-if="errors.age" class="error">{{ errors.age }}</div></transition>
         </label>
         <label>
             Погоджуєтесь з умовами:
             <input v-model="form.agree" type="checkbox"/>
-            <div v-if="errors.agree" class="error">{{ errors.agree }}</div>
+            <transition name="fade"><div v-if="errors.agree" class="error">{{ errors.agree }}</div></transition>
         </label>
         <button type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Відправка...' : 'Зареєструватися' }}</button>
-        <span v-if="successMsg" class="success">{{ successMsg }}</span>
-   </form>
+        <transition name="fade">
+            <span v-if="successMsg" class="success">{{ successMsg }}</span>
+        </transition>
+    </form>
 </template>
 
 <style scoped>
@@ -71,6 +73,15 @@
     .success{
         color: green;
         margin-left: 10px;
+    }
+    .fade-enter-active, .fade-leave-active{
+        transition: opacity 0.3s;
+    }
+    .fade-enter-from, .fade-leave-to{
+        opacity: 0;
+    }
+    .fade-enter-to, .fade-leave-from{
+        opacity: 1;
     }
 </style>
 
