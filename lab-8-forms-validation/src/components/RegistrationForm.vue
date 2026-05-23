@@ -31,8 +31,9 @@
             <input v-model="form.agree" type="checkbox"/>
             <div v-if="errors.agree" class="error">{{ errors.agree }}</div>
         </label>
-        <button type="submit">Зареєструватися</button>
-    </form>
+        <button type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'Відправка...' : 'Зареєструватися' }}</button>
+        <span v-if="successMsg" class="success">{{ successMsg }}</span>
+   </form>
 </template>
 
 <style scoped>
@@ -67,10 +68,14 @@
     .error{
         color: red;
     }
+    .success{
+        color: green;
+        margin-left: 10px;
+    }
 </style>
 
 <script setup>
-    import {reactive} from 'vue';
+    import {reactive, ref, watch} from 'vue';
 
     const form = reactive({
         name: '',
@@ -82,13 +87,14 @@
     });
 
     const errors = reactive({});
+    const isSubmitting = ref(false);
+    const successMsg = ref('');
 
     function validate(){
         Object.keys(errors).forEach(key => delete errors[key]);
 
         if(!form.name) errors.name = "Ім'я є обов'язковим.";
         if(!form.email) errors.email = "Email обов'язковий.";
-        else if(!/\S+@\S+\.\S+/.test(form.email)) errors.email = "Невірний формат email.";
         if(!form.password) errors.password = "Пароль обов'язковий.";
         else if(form.password.length < 6) errors.password = "Пароль має бути не менше 6 символів.";
         if(!form.confirmPassword) errors.confirmPassword = "Підтвердження пароля обов'язкове.";
@@ -98,9 +104,27 @@
         return Object.keys(errors).length === 0;
     }
 
+    watch(form, () => {
+        if(Object.keys(errors).length > 0){
+            validate();
+        }
+    }, { deep: true });
+
     function onSubmit(){
         if(validate()){
-            console.log('Дані форми:', form);
+            isSubmitting.value = true;
+            setTimeout(() => {
+                successMsg.value = "Реєстрація успішна!";
+
+                form.name = '';
+                form.email = '';
+                form.password = '';
+                form.confirmPassword = '';
+                form.age = null;
+                form.agree = false;
+
+                isSubmitting.value = false;
+            }, 2000);
         }
     }
 </script>
